@@ -1,7 +1,12 @@
 @import 'template/head.less';
 @import 'template/foot.less';
 @import 'template/positionList.less';
+@import 'template/positionInfo.less';
+@import 'template/positionClass.less';
+@import 'template/company.less';
 @import 'property.less';
+@import 'variable.less';
+@import 'position.less';
 html,
 body {
     height: 100%;
@@ -14,6 +19,11 @@ body {
     .fs(16);
 }
 
+button {
+    border-width: 0;
+    outline-width: 0;
+}
+
 .fs(@px) {
     font-size: unit(@px/37.5, rem);
 }
@@ -23,7 +33,7 @@ body {
 }
 
 .h(@px) {
-    heigh: unit(@px/37.5, rem);
+    height: unit(@px/37.5, rem);
 }
 
 .lh(@px) {
