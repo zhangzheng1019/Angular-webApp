@@ -1,8 +1,9 @@
 <ul class="bg-w position-list">
-    <li class="item" ng-repeat="item in data">
-        <img ng-src="{{item.imgSrc}}" alt="" class="f-l logo">
+    <li ng-repeat="item in data" ui-sref="position({id:item.id})" class="item">
+        <img ng-src="{{item.imageUrl}}" alt="" class="f-l logo">
         <h3 class="title" ng-bind="item.name"></h3>
-        <p class="text" ng-bind="item.companyName+'['+item.city+']'+' '+item.industry"></p>
-        <p class="text" ng-bind="item.time"></p>
+        <h3 class="text" ng-bind="item.companyName+'['+item.cityName+']'+' '+item.industry"></h3>
+        <p class="text" ng-bind="item.date"></p>
+        <div class="clear"></div>
     </li>
 </ul>
