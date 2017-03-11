@@ -9,12 +9,14 @@ angular.module('app').directive('appPositionClass', [function() {
         templateUrl: 'view/template/positionClass.html',
         link: function($scope) {
             $scope.showPositionList = function(idx) {
-                    $scope.positionList = $scope.com.positionClass[idx].positionList;
-                    $scope.isActive = idx;
+                $scope.positionList = $scope.com.positionClass[idx].positionList;
+                $scope.isActive = idx;
+            };
+            $scope.$watch('com', function(newVale) {
+                if (newVale) {
+                    $scope.showPositionList(0);
                 }
-                //bug
-            $scope.showPositionList(0);
-            // console.log($scope.company.positionClass[0][0].positionList)
+            });
         }
     };
 }]);
