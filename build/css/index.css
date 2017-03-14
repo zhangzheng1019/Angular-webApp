@@ -129,6 +129,66 @@
 .company-info p {
   margin-top: 0;
 }
+.tab {
+  background-color: #eee;
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  margin-top: 1.06666667rem;
+  font-size: 0;
+}
+.tab li {
+  background-color: #fff;
+  font-size: 0.37333333rem;
+  width: 33.3%;
+  height: 1.06666667rem;
+  line-height: 1.06666667rem;
+  border-bottom: 2px solid #f7f7f7;
+}
+.tab li.active {
+  border-bottom: 2px solid #12d5b5;
+}
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.sheet .wrap {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 100;
+}
+.sheet .wrap li,
+.sheet .wrap button {
+  color: #1063e5;
+  background-color: #f1f2f3;
+  font-size: 0.42666667rem;
+  height: 1.33333333rem;
+  line-height: 1.33333333rem;
+  width: 100%;
+}
+.sheet .wrap button {
+  margin-top: 8px;
+}
+.sheet .wrap ul {
+  border-radius: 5px;
+  padding: 0;
+  overflow: scroll;
+  max-height: 500px;
+}
+.sheet .wrap ul li {
+  list-style: none;
+  border-bottom: 1px solid #d4d4d4;
+}
 .bg-w {
   background-color: #fff;
 }
@@ -203,12 +263,55 @@
 .position-desc pre {
   padding-left: 10px;
   margin-left: 0;
+  padding-bottom: 20px;
+}
+.search-bar {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  background-color: #12d5b5;
+  height: 1.06666667rem;
+  line-height: 1.06666667rem;
+}
+.search-bar img {
+  transform: scale(0.6);
+}
+.search-bar input {
+  width: 5.06666667rem;
+  height: 0.66666667rem;
+  border-style: none;
+  border-radius: 80px;
+  outline-style: none;
+  outline-width: 0;
+  box-sizing: border-box;
+  background-color: #eee;
+  padding-left: 0.53333333rem;
+}
+.search-bar button {
+  background-color: #12d5b5;
+}
+.search-bar button:first-child {
+  color: #fff;
+}
+.search-bar button:last-child {
+  background-image: url(../image/search.png);
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-position: 0 4px;
+  padding-left: 20px;
+  margin-left: 10px;
+  color: #9f919d;
+}
+.search-list {
+  margin-top: 2.13333333rem;
 }
 html,
 body {
   height: 100%;
   width: 100%;
   padding: 0;
+  margin: 0;
 }
 body {
   background-color: #eee;
