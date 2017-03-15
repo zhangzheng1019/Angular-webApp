@@ -26,10 +26,10 @@
 
 ## AngularJS报错信息
 
-Error: [$injector:modulerr] :模块加载问题
-解决方法：您忘记将文件包含在定义的模块中或文件无法加载。
-Error: [$compile:tpload] :$compile尝试从某个URL提取模板时发生此错误，并且请求失败。
-解决方法：请确保模板的URL正确拼写，并解析为正确的绝对URL。
+- **Error: [$injector:modulerr] :模块加载问题**
+<br>解决方法：您忘记将文件包含在定义的模块中或文件无法加载。
+- **Error: [$compile:tpload] :$compile尝试从某个URL提取模板时发生此错误，并且请求失败。**
+<br>解决方法：请确保模板的URL正确拼写，并解析为正确的绝对URL。
 
 ## Chrome/Firebug调试工具(扩展程序)：batarang
 
