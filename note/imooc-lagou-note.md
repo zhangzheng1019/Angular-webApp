@@ -36,13 +36,14 @@ Error: [$compile:tpload] :$compile尝试从某个URL提取模板时发生此错�
 ## 代码管理工具Git
 
 ## bower包管理工具（第三方依赖管理工具）
-命令：init(初始化，创建bower配置文件)/install(安装)/uninstall(卸载)
-配置文件：.bowerrc(修改安装目录[命令行创建'null>.bowerrc'])/bower.json(常用)
+- **命令：init(初始化，创建bower配置文件)/install(安装)/uninstall(卸载)**
+- **配置文件：.bowerrc(修改安装目录[命令行创建'null>.bowerrc'])/bower.json(常用)**
+```
 .bowerrc文件
 {
     "directory":"lib"//将会生成一个lib文件夹
 }
-
+```
 ## less功能：
 - **定义变量（@变量名:值）**
 - **后代选择器（嵌套）**
@@ -76,9 +77,9 @@ Error: [$compile:tpload] :$compile尝试从某个URL提取模板时发生此错�
 ```
 
 ## 单页面应用：
-定义：页面跳转无刷新
-方法：利用路由控制“页面”跳转
-优点：页面切换流畅、前后端分离
+- **定义：页面跳转无刷新**
+- **方法：利用路由控制“页面”跳转**
+- **优点：页面切换流畅、前后端分离**
 
 ## 文件目录说明
 ```
