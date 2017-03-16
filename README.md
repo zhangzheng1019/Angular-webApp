@@ -18,3 +18,28 @@ gulp
 - **手机端布局rem**
 - **CSS预编译语言less**
 - **MVC前端框架AngularJS**
+
+## 文件目录说明
+```
+|--bower_components:
+|--build:
+|--dist:产品发布目录(部署发布)
+|--note:听课笔记
+|--src:源码
+    |--data:假数据（json文件）
+    |--image:
+    |--script
+        |--config:
+        |--controller:
+        |--directive:
+        |--filter:
+        |--service:
+        |--app.js:入口文件
+    |--style:样式文件
+    |--view：视图文件
+|--test:单元测试、集成测试<本项目没有引入>
+|--eslintrc:代码审查<本项目没有引入>
+|--gulpfile.js:gulp配置文件
+|--package.json ：npm初始化
+|--bower.json：bower配置文件
+```
