@@ -1,6 +1,6 @@
 'use strict';
 // value()声明全局变量
-angular.module('app', ['ui.router', 'ngCookies']).value('dict', {}).run(['dict', '$http', function(dict, $http) {
+angular.module('app', ['ui-router', 'ngCookies', 'validation']).value('dict', {}).run(['dict', '$http', function(dict, $http) {
     $http.get('data/city.json').then(function(resp) {
         dict.city = resp.data;
     });
