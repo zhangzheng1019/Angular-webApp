@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('app', ['ui-router', 'ngCookies']);
+angular.module('app', ['ui-router', 'ngCookies', 'validation']);
 
 'use strict';
 // value()声明全局变量
-angular.module('app', ['ui.router', 'ngCookies']).value('dict', {}).run(['dict', '$http', function(dict, $http) {
+angular.module('app', ['ui-router', 'ngCookies', 'validation']).value('dict', {}).run(['dict', '$http', function(dict, $http) {
     $http.get('data/city.json').then(function(resp) {
         dict.city = resp.data;
     });
@@ -36,10 +36,51 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
         url: '/search',
         templateUrl: 'view/search.html',
         controller: 'searchCtrl'
+    }).state('login', {
+        url: '/login',
+        templateUrl: 'view/login.html',
+        controller: 'loginCtrl'
+    }).state('register', {
+        url: '/register',
+        templateUrl: 'view/register.html',
+        controller: 'registerCtrl'
+    }).state('me', {
+        url: '/me',
+        templateUrl: 'view/me.html',
+        controller: 'meCtrl'
+    }).state('post', {
+        url: '/post',
+        templateUrl: 'view/post.html',
+        controller: 'postCtrl'
+    }).state('favorite', {
+        url: '/favorite',
+        templateUrl: 'view/favorite.html',
+        controller: 'favoriteCtrl'
     });
 
     $urlRouterProvider.otherwise('main');
 }]);
+
+"use strict";
+angular.module('app', ['ui-router', 'ngCookies', 'validation']).config(['$validationProvider', function($validationProvider) {
+    var expression = {
+        phone: /^1[\d]{10}/,
+        password: function(value) {
+            return value > 5;
+        }
+    };
+    var defaultMsg = {
+        phone: {
+            success: '',
+            error: '必须是11为手机号'
+        },
+        password: {
+            success: '',
+            error: '长度至少6位'
+        }
+    };
+    $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
+}])
 
 'use strict';
 
@@ -51,10 +92,28 @@ angular.module('app').controller('companyCtrl', ['$http', '$state', '$scope', fu
 
 'use strict';
 
+angular.module('app').controller('favoriteCtrl', ['$scope', '$http', function($scope, $http) {
+
+}])
+
+'use strict';
+
+angular.module('app').controller('loginCtrl', ['$scope', '$http', function($scope, $http) {
+
+}])
+
+'use strict';
+
 angular.module('app').controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
     $http.get('/data/positionList.json').then(function(res) {
         $scope.list = res.data;
     })
+}])
+
+'use strict';
+
+angular.module('app').controller('meCtrl', ['$scope', '$http', function($scope, $http) {
+
 }])
 
 'use strict';
@@ -95,6 +154,27 @@ angular.module('app')
              */
         }
     ])
+
+'use strict';
+
+angular.module('app').controller('postCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.tabList = [{
+        id: 'all',
+        name: "全部"
+    }, {
+        id: 'pass',
+        name: "面试邀请"
+    }, {
+        id: 'fail',
+        name: "不合适"
+    }]
+}])
+
+'use strict';
+
+angular.module('app').controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
+
+}])
 
 'use strict';
 angular.module('app').controller('searchCtrl', ['dict', '$http', '$scope', function(dict, $http, $scope) {
