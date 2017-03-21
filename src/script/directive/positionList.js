@@ -8,6 +8,12 @@ angular.module('app').directive('appPositionList', [function() {
         scope: {
             data: '=',
             filterObj: "="
+        },
+        link: function($scope) {
+            $scope.name = cache.get('name') || '';
+            $scope.select = function(item) {
+                item.select = !item.select;
+            }
         }
     };
 }]);
