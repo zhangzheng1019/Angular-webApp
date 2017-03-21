@@ -1,11 +1,17 @@
 "use strict";
-angular.module('app', ['ui-router', 'ngCookies', 'validation']).config(['$validationProvider', function($validationProvider) {
+angular.module('app').config(['$validationProvider', function($validationProvider) {
+    //规则
     var expression = {
         phone: /^1[\d]{10}/,
         password: function(value) {
-            return value > 5;
+            var str = value + '';
+            return str.length > 5;
+        },
+        required: function(value) {
+            return !!value;
         }
     };
+    // 错误提示语
     var defaultMsg = {
         phone: {
             success: '',
@@ -14,7 +20,13 @@ angular.module('app', ['ui-router', 'ngCookies', 'validation']).config(['$valida
         password: {
             success: '',
             error: '长度至少6位'
+        },
+        required: {
+            success: '',
+            error: '不能为空'
         }
     };
+    // setExpression:配置规则
+    // setDefaultMsg:配置错误提示
     $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
 }])
