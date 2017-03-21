@@ -76,6 +76,20 @@
 .position-list .item .text {
   margin: 0;
 }
+.position-list .item .icon {
+  width: 0.8rem;
+  height: 0.74666667rem;
+  top: 14px;
+  right: 12px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.position-list .item .icon.star {
+  background-image: urll('../image/star.png');
+}
+.position-list .item .icon.star-active {
+  background-image: urll('../image/star-active.png');
+}
 .position-info {
   border-bottom: 1px solid #ccc;
   padding: 26px 10px 18px 10px;
@@ -476,6 +490,11 @@
   color: #12d5b5;
   border: 1px solid #12d5b5;
   padding: 0 5px;
+  margin-top: 20px;
+}
+.register form .message-wrap .message.disabled {
+  color: #d4d4d4;
+  border-color: #d4d4d4;
 }
 .register form button {
   width: 8rem;
@@ -502,6 +521,14 @@
 .me .name {
   margin-top: 0.66666667rem;
 }
+.me .login-btn {
+  font-size: 0.42666667rem;
+  width: 9.06666667rem;
+  height: 1.06666667rem;
+  margin-top: 8rem;
+  color: #fff;
+  background-color: #12d5b5;
+}
 .me .btns {
   margin-top: 1.06666667rem;
 }
@@ -519,6 +546,9 @@
   height: 1.06666667rem;
   margin-top: 0.53333333rem;
   background-color: red;
+}
+.my-post {
+  margin-top: 1.06666667rem;
 }
 html,
 body {
