@@ -3,6 +3,121 @@
 angular.module('app', ['ui.router', 'ngCookies', 'validation']);
 
 'use strict';
+// value()声明全局变量
+angular.module('app').value('dict', {}).run(['dict', '$http', function(dict, $http) {
+    $http.get('data/city.json').then(function(resp) {
+        dict.city = resp.data;
+    });
+    $http.get('data/salary.json').then(function(resp) {
+        dict.salary = resp.data;
+    });
+    $http.get('data/scale.json').then(function(resp) {
+        dict.scale = resp.data;
+    });
+}]);
+
+'use strict';
+angular.module('app').config(['$provide', function($provide) {
+    $provide.decorator('$http', ['$delegate', '$q', function($delegate, $q) {
+        $delegate.post = function(url, data, config) {
+            var def = $q.defer();
+            $delegate.get(url).then(function(resp) {
+                def.resolve(resp);
+            }).then(function(err) {
+                def.reject(err);
+            });
+            return {
+                success: function(cb) {
+                    def.promise.then(cb);
+                },
+                error: function(cb) {
+                    def.promise.then(null, cb);
+                }
+            }
+        }
+        return $delegate;
+    }]);
+}]);
+
+'use strict';
+
+
+angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('main', {
+        url: '/main',
+        templateUrl: 'view/main.html',
+        controller: 'mainCtrl'
+    }).state('position', {
+        url: '/position/:id',
+        templateUrl: 'view/position.html',
+        controller: 'positionCtrl'
+    }).state('company', {
+        url: '/company/:id',
+        templateUrl: 'view/company.html',
+        controller: 'companyCtrl'
+    }).state('search', {
+        url: '/search',
+        templateUrl: 'view/search.html',
+        controller: 'searchCtrl'
+    }).state('login', {
+        url: '/login',
+        templateUrl: 'view/login.html',
+        controller: 'loginCtrl'
+    }).state('register', {
+        url: '/register',
+        templateUrl: 'view/register.html',
+        controller: 'registerCtrl'
+    }).state('me', {
+        url: '/me',
+        templateUrl: 'view/me.html',
+        controller: 'meCtrl'
+    }).state('post', {
+        url: '/post',
+        templateUrl: 'view/post.html',
+        controller: 'postCtrl'
+    }).state('favorite', {
+        url: '/favorite',
+        templateUrl: 'view/favorite.html',
+        controller: 'favoriteCtrl'
+    });
+
+    $urlRouterProvider.otherwise('main');
+}]);
+
+"use strict";
+angular.module('app').config(['$validationProvider', function($validationProvider) {
+    //规则
+    var expression = {
+        phone: /^1[\d]{10}/,
+        password: function(value) {
+            var str = value + '';
+            return str.length > 5;
+        },
+        required: function(value) {
+            return !!value;
+        }
+    };
+    // 错误提示语
+    var defaultMsg = {
+        phone: {
+            success: '',
+            error: '必须是11为手机号'
+        },
+        password: {
+            success: '',
+            error: '长度至少6位'
+        },
+        required: {
+            success: '',
+            error: '不能为空'
+        }
+    };
+    // setExpression:配置规则
+    // setDefaultMsg:配置错误提示
+    $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
+}])
+
+'use strict';
 
 angular.module('app').controller('companyCtrl', ['$http', '$state', '$scope', function($http, $state, $scope) {
     $http.get('/data/company.json?id=' + $state.params.id).then(function(res) {
@@ -55,42 +170,57 @@ angular.module('app').controller('meCtrl', ['$state', 'cache', '$http', '$scope'
 
 'use strict';
 
-angular.module('app')
-    .controller('positionCtrl', ['$q', '$http', '$state', '$scope', 'cache',
-        function($q, $http, $state, $scope, cache) {
-            cache.remove('to')
-            $scope.isLogin = false;
+angular.module('app').controller('positionCtrl', ['$log', '$q', '$http', '$state', '$scope', 'cache', function($log, $q, $http, $state, $scope, cache) {
+    $scope.isLogin = !!cache.get('name');
+    $scope.message = $scope.isLogin ? '投个简历' : '去登录';
 
-            function getPosition() {
-                var def = $q.defer(); //创建延迟加载对象
-                $http.get('/data/position.json', {
-                    params: {
-                        id: $state.params.id
-                    }
-                }).then(function(res) {
-                    $scope.position = res.data;
-                    def.resolve(res);
-                }, function(err) {
-                    def.reject(err);
-                });
-                return def.promise;
+    function getPosition() {
+        var def = $q.defer(); //创建延迟加载对象
+        $http.get('/data/position.json', {
+            params: {
+                id: $state.params.id
             }
+        }).then(function(res) {
+            $scope.position = res.data;
+            if (res.data.posted) {
+                $scope.message = '已投递';
+            }
+            def.resolve(res);
+        }, function(err) {
+            def.reject(err);
+        });
+        return def.promise;
+    }
 
-            function getCompany(id) {
-                $http.get('data/company.json?id=' + id).then(function(res) {
-                    $scope.company = res.data;
+    function getCompany(id) {
+        $http.get('data/company.json?id=' + id).then(function(res) {
+            $scope.company = res.data;
+        })
+    }
+    getPosition().then(function(obj) {
+        getCompany(obj.data.companyId);
+    });
+    /*
+        func1()和func2()均为promise对象
+        $q.all([func1(),func2()]).then(function(result){});
+
+     */
+    $scope.go = function() {
+        if ($scope.message !== '已投递') {
+
+            if ($scope.isLogin) {
+                $http.post('data/handle.json', {
+                    id: $scope.position.id
+                }).success(function(res) {
+                    $log.info(res.data);
+                    $scope.message = '已投递';
                 })
+            } else {
+                $state.go('login');
             }
-            getPosition().then(function(obj) {
-                getCompany(obj.data.companyId);
-            });
-            /*
-                func1()和func2()均为promise对象
-                $q.all([func1(),func2()]).then(function(result){});
-
-             */
         }
-    ])
+    }
+}])
 
 'use strict';
 angular.module('app').controller('postCtrl', ['$http', '$scope', function($http, $scope) {
@@ -234,11 +364,14 @@ angular.module('app').directive('appFoot', [function() {
 
 'use strict';
 
-angular.module('app').directive('appHead', [function() {
+angular.module('app').directive('appHead', ['cache', function(cache) {
     return {
         restrict: 'A',
         replace: true,
-        templateUrl: 'view/template/head.html'
+        templateUrl: 'view/template/head.html',
+        link: function($scope) {
+            $scope.name = cache.get('name');
+        }
     };
 }]);
 
@@ -285,37 +418,55 @@ angular.module('app').directive('appPositionClass', [function() {
 
 'use strict';
 
-angular.module('app').directive('appPositionInfo', [function() {
+angular.module('app').directive('appPositionInfo', ['$http', function($http) {
     return {
         restrict: 'A',
         replace: true,
         templateUrl: 'view/template/positionInfo.html',
         scope: {
-            isActive: '=',
             isLogin: '=',
             pos: '='
         },
         link: function(scope) {
-            scope.imagePath = scope.isActive ? 'image/star-active.png' : 'image/star.png';
+            scope.$watch('pos', function(newVale) {
+                if (newVale) {
+                    scope.pos.select = scope.pos.select || false;
+                    scope.imagePath = scope.pos.select ? 'image/star-active.png' : 'image/star.png';
+                }
+            })
+            scope.favorite = function() {
+                $http.post('data/favorite.json', {
+                    id: scope.pos.id,
+                    select: scope.pos.select
+                }).success(function(res) {
+                    scope.pos.select = !scope.pos.select;
+                    scope.imagePath = scope.pos.select ? 'image/star-active.png' : 'image/star.png';
+                })
+            }
         }
     };
 }]);
 
 'use strict';
 
-angular.module('app').directive('appPositionList', [function() {
+angular.module('app').directive('appPositionList', ['$http', function($http) {
     return {
         restrict: "A",
         replace: true,
         templateUrl: "view/template/positionList.html",
         scope: {
             data: '=',
-            filterObj: "="
+            filterObj: "=",
+            isFavorite: '='
         },
         link: function($scope) {
-            $scope.name = cache.get('name') || '';
             $scope.select = function(item) {
-                item.select = !item.select;
+                $http.post('data/favorite.json', {
+                    id: item.id,
+                    select: !item.select
+                }).success(function(res) {
+                    item.select = !item.select;
+                })
             }
         }
     };
@@ -374,19 +525,17 @@ angular.module('app').filter('filterByObj', [function() {
 }]);
 
 'use strict';
-angular.module('app')
-    .service('cache', ['$cookies', function($cookies) {
-        this.put = function(key, value) {
-            return $cookies.put(key, value);
-        };
-        this.get = function(key) {
-            return $cookies.get(key);
-        };
-        this.remove = function(key) {
-            $cookies.remove(key);
-        };
-    }]);
-
+angular.module('app').service('cache', ['$cookies', function($cookies) {
+    this.put = function(key, value) {
+        $cookies.put(key, value);
+    };
+    this.get = function(key) {
+        return $cookies.get(key);
+    };
+    this.remove = function(key) {
+        $cookies.remove(key);
+    };
+}]);
 // .factory('cache', ['$cookies', function($cookies) {
 //     return {
 //         get: function(key) {
@@ -400,118 +549,3 @@ angular.module('app')
 //         }
 //     }
 // }]);
-
-'use strict';
-// value()声明全局变量
-angular.module('app').value('dict', {}).run(['dict', '$http', function(dict, $http) {
-    $http.get('data/city.json').then(function(resp) {
-        dict.city = resp.data;
-    });
-    $http.get('data/salary.json').then(function(resp) {
-        dict.salary = resp.data;
-    });
-    $http.get('data/scale.json').then(function(resp) {
-        dict.scale = resp.data;
-    });
-}]);
-
-'use strict';
-angular.module('app').config(['$provide', function($provide) {
-    $provide.decorator('$http', ['$delegate', '$q', function($delegate, $q) {
-        $delegate.post = function(url, data, config) {
-            var def = $q.defer();
-            $delegate.get(url).then(function(resp) {
-                def.resolve(resp);
-            }).then(function(err) {
-                def.reject(err);
-            });
-            return {
-                success: function(cb) {
-                    def.promise.then(cb);
-                },
-                error: function(cb) {
-                    def.promise.then(null, cb);
-                }
-            }
-        }
-        return $delegate;
-    }]);
-}]);
-
-'use strict';
-
-
-angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('main', {
-        url: '/main',
-        templateUrl: 'view/main.html',
-        controller: 'mainCtrl'
-    }).state('position', {
-        url: '/position/:id',
-        templateUrl: 'view/position.html',
-        controller: 'positionCtrl'
-    }).state('company', {
-        url: '/company/:id',
-        templateUrl: 'view/company.html',
-        controller: 'companyCtrl'
-    }).state('search', {
-        url: '/search',
-        templateUrl: 'view/search.html',
-        controller: 'searchCtrl'
-    }).state('login', {
-        url: '/login',
-        templateUrl: 'view/login.html',
-        controller: 'loginCtrl'
-    }).state('register', {
-        url: '/register',
-        templateUrl: 'view/register.html',
-        controller: 'registerCtrl'
-    }).state('me', {
-        url: '/me',
-        templateUrl: 'view/me.html',
-        controller: 'meCtrl'
-    }).state('post', {
-        url: '/post',
-        templateUrl: 'view/post.html',
-        controller: 'postCtrl'
-    }).state('favorite', {
-        url: '/favorite',
-        templateUrl: 'view/favorite.html',
-        controller: 'favoriteCtrl'
-    });
-
-    $urlRouterProvider.otherwise('main');
-}]);
-
-"use strict";
-angular.module('app').config(['$validationProvider', function($validationProvider) {
-    //规则
-    var expression = {
-        phone: /^1[\d]{10}/,
-        password: function(value) {
-            var str = value + '';
-            return str.length > 5;
-        },
-        required: function(value) {
-            return !!value;
-        }
-    };
-    // 错误提示语
-    var defaultMsg = {
-        phone: {
-            success: '',
-            error: '必须是11为手机号'
-        },
-        password: {
-            success: '',
-            error: '长度至少6位'
-        },
-        required: {
-            success: '',
-            error: '不能为空'
-        }
-    };
-    // setExpression:配置规则
-    // setDefaultMsg:配置错误提示
-    $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
-}])

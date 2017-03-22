@@ -36,6 +36,7 @@
   color: #9f919d;
   width: 33.33%;
   padding-top: 0.10666667rem;
+  padding-bottom: 0.13333333rem;
 }
 .foot li.select {
   background-color: #dbf9f4;
@@ -85,10 +86,10 @@
   background-repeat: no-repeat;
 }
 .position-list .item .icon.star {
-  background-image: urll('../image/star.png');
+  background-image: url('../image/star.png');
 }
 .position-list .item .icon.star-active {
-  background-image: urll('../image/star-active.png');
+  background-image: url('../image/star-active.png');
 }
 .position-info {
   border-bottom: 1px solid #ccc;
@@ -549,6 +550,32 @@
 }
 .my-post {
   margin-top: 1.06666667rem;
+}
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
 }
 html,
 body {
