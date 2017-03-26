@@ -13,11 +13,11 @@ gulp
 ```
 # 使用到的技术
 
-- **包管理工具bower**
-- **前端自动化构建工具gulp**
+- **包管理工具[Bower](https://bower.io/)**
+- **前端自动化构建工具[Gulp](http://www.gulpjs.com.cn/)**
 - **手机端布局rem**
-- **CSS预编译语言less**
-- **MVC前端框架AngularJS**
+- **CSS预编译语言[Less](http://lesscss.cn/)**
+- **MVC前端框架[AngularJS](https://angular.cn/)**
 
 ## 文件目录说明
 ```
